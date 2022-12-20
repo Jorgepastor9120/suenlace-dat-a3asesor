@@ -1,7 +1,7 @@
 <?php
 //Funciones para adaptar los datos al requerimiento de SUENLACE.dat
 
-function funcStrPadRight( $texto_origen, $limite_caracteres, $caracter_add ) {
+function SubstrStrPadRight( $texto_origen, $limite_caracteres, $caracter_add ) {
 
     $texto = substr( $texto_origen, 0, $limite_caracteres );
     return str_pad( $texto, $limite_caracteres, "$caracter_add", STR_PAD_RIGHT );
@@ -43,7 +43,7 @@ function AdaptaTelefono ( $telefono_cliente ) {
 
 }
 
-function AdaptaImporteIvaIncl ( $importe_iva_incl ) {
+function AdaptaImportes ( $importe_iva_incl ) {
 
     $importe_iva_incl = number_format($importe_iva_incl, 2, '.', '');
 
@@ -61,6 +61,14 @@ function AdaptaImporteIvaIncl ( $importe_iva_incl ) {
     }
 
     return( $importe_iva_incl );
+
+}
+
+function AdaptaPorcentajeIVA ( $porcentaje_iva ) {
+
+    $porcentaje_iva = number_format($porcentaje_iva, 2, '.', '');
+
+    return( str_pad($porcentaje_iva, 2, "0", STR_PAD_LEFT) );
 
 }
 
@@ -98,27 +106,27 @@ $codigo_de_empresa = 55555;
     
     $fecha_alta = UnificaFechaAAAAMMDD( $fecha_add_cliente );
     $tipo_de_registro = "C";
-    $cuenta = funcStrPadRight( $cuenta_contable_cliente,12," " );
-    $descripcion_cuenta = funcStrPadRight( $nombre_cliente,30," " );
+    $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
+    $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
     $actualiza_saldo_inicial = "N";
     $saldo_inicial = "+0000000000.00";
     $ampliacion = " "; //1 espacio en blanco
     $reserva = "    "; //4 espacios en blanco
-    $nif = funcStrPadRight( $nif_cliente,14," " );
-    $siglas_via_publica = funcStrPadRight( $siglas_via_publica_cliente,2," " );
-    $via_publica = funcStrPadRight( $via_publica_cliente,30," " );
-    $numero_portal = funcStrPadRight( $numero_portal_cliente,5," " );
-    $escalera = funcStrPadRight( $escalera_cliente,2," " );
-    $piso = funcStrPadRight( $piso_cliente,2," " );
-    $puerta = funcStrPadRight( $puerta_cliente,2," " );
-    $municipio = funcStrPadRight( $municipio_cliente,20," " );
-    $codigo_postal = funcStrPadRight( $codigo_postal_cliente,20," " );
-    $provincia = funcStrPadRight( $provincia_cliente,15," " );
+    $nif = SubstrStrPadRight( $nif_cliente,14," " );
+    $siglas_via_publica = SubstrStrPadRight( $siglas_via_publica_cliente,2," " );
+    $via_publica = SubstrStrPadRight( $via_publica_cliente,30," " );
+    $numero_portal = SubstrStrPadRight( $numero_portal_cliente,5," " );
+    $escalera = SubstrStrPadRight( $escalera_cliente,2," " );
+    $piso = SubstrStrPadRight( $piso_cliente,2," " );
+    $puerta = SubstrStrPadRight( $puerta_cliente,2," " );
+    $municipio = SubstrStrPadRight( $municipio_cliente,20," " );
+    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,20," " );
+    $provincia = SubstrStrPadRight( $provincia_cliente,15," " );
     $pais = CodigoPais( $pais_cliente );
     $telefono = AdaptaTelefono( $telefono_cliente );
-    $extension = funcStrPadRight( $extension_cliente,4," " );
-    $fax = funcStrPadRight( $fax_cliente,12," " );
-    $email = funcStrPadRight( $email_cliente,30," " );
+    $extension = SubstrStrPadRight( $extension_cliente,4," " );
+    $fax = SubstrStrPadRight( $fax_cliente,12," " );
+    $email = SubstrStrPadRight( $email_cliente,30," " );
     $reservado = "  "; //2 espacios
     $criterio_de_caja = " "; //1 espacio
     $cuenta_contrapartida 	= "            "; //12 espacios
@@ -156,21 +164,21 @@ $codigo_de_empresa = 55555;
 
     $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_factura );
     $tipo_registro = 1;
-    $cuenta = funcStrPadRight( $cuenta_contable_cliente,12," " );
-    $descripcion_cuenta = funcStrPadRight( $nombre_cliente,30," " );
+    $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
+    $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
     $tipo_de_factura = 1; //Facturas de venta
-    $numero_factura = funcStrPadRight( $numero_factura_cliente,10," " );
+    $numero_factura = SubstrStrPadRight( $numero_factura_cliente,10," " );
     $linea_apunte = 'I';
     $descripcion_apunte = $descripcion_cuenta;
-    $importe = AdaptaImporteIvaIncl( $importe_total_iva_incl );
+    $importe = AdaptaImportes( $importe_total_iva_incl );
     $reserva = "                                                              "; //62 espacios
-    $nif = funcStrPadRight( $nif_cliente,14," " );
-    $nombre_cliente = funcStrPadRight( $nombre_cliente,30," " );
-    $codigo_postal = funcStrPadRight( $codigo_postal_cliente,20," " );
+    $nif = SubstrStrPadRight( $nif_cliente,14," " );
+    $nombre_cliente = SubstrStrPadRight( $nombre_cliente,30," " );
+    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,20," " );
     $reserva_1 = "  "; //2 espacios
     $fecha_operacion = "        "; //8 espacios
     $fecha_de_factura = "        "; //8 espacios
-    $numero_ampliado = funcStrPadRight( $numero_factura_cliente,60," " );
+    $numero_ampliado = SubstrStrPadRight( $numero_factura_cliente,60," " );
     $reserva_2 = "                                                                                                                                                                                                    "; //196 espacios
     $moneda_enlace = "E";
 
@@ -179,6 +187,110 @@ $codigo_de_empresa = 55555;
     if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
         
         fwrite($archivo, $linea_factura_cabecera);
+        fclose($archivo);
+
+    }
+
+    //TIPO DE REGISTRO 9. Detalle de apuntes con IVA
+    /* 
+    *Suponemos que en la factura a añadir tenemos 2 lineas, una con iva 10% y otra con iva 21%. 
+    *La primera línea de apunte (M o U) tendrá el valor M y la útlima linea tendrá el valor U.
+    */
+
+    //Linea 1 (M):
+    $importe_total_iva_excl = 100.00;
+    $importe_total_iva_incl = 110.00; // 100 + 10%
+    $cuota_de_iva = 10.00;
+    $porcentaje_de_iva = 10;
+    $porcentaje_de_recargo = 0;
+    $cuota_de_recargo = 0;
+    $porcentaje_de_retencion = 0;
+    $cuota_de_retencion = 0;
+
+    $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_factura );
+    $tipo_registro = 9;
+    $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
+    $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
+    $tipo_importe = "C";
+    $numero_factura = SubstrStrPadRight( $numero_factura_cliente,10," " );
+    $linea_apunte = "M";
+    $descripcion_apunte = SubstrStrPadRight( $nombre_cliente,30," " );
+    $subtipo_factura = "01"; //Operaciones interiores sujetas a IVA
+    $base_imponible = AdaptaImportes( $importe_total_iva_excl );
+    $porcentaje_iva = AdaptaPorcentajeIVA( $porcentaje_de_iva );
+    $cuota_iva = AdaptaImportes( $cuota_de_iva );
+    $porcentaje_recargo = AdaptaPorcentajeIVA( $porcentaje_de_recargo );
+    $cuota_recargo = AdaptaImportes( $cuota_de_recargo );
+    $porcentaje_retencion = AdaptaPorcentajeIVA( $porcentaje_de_retencion );
+    $cuota_retencion = AdaptaImportes( $cuota_de_retencion );
+    $impreso = "01"; //Impreso 347
+    $operacion_sujeta_iva = "S"; //Es una operación con IVA
+    $marca_afecta_415 = "N"; //No afecta
+    $critero_de_caja = " "; //1 espacio
+    $reserva = "              "; //14 espacios
+    $cuenta_iva_soportado = "477000000000";
+    $cuenta_recargo_soportado = "000000000000";
+	$cuenta_retencion = "000000000000";
+    $cuenta_iva_2_repercutido = "000000000000";
+    $cuenta_recargo_2_repercutido = "000000000000";
+    $registro_analitico = " "; //1 espacio
+	$reserva_1 = "                                                                                                                                                                                                                                                                "; //256 espacios
+	$moneda_enlace = "E";
+    
+    $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+
+    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+        
+        fwrite($archivo, $linea_iva_factura);
+        fclose($archivo);
+
+    }
+
+    //Linea 2 (U):
+    $importe_total_iva_excl = 100.00;
+    $importe_total_iva_incl = 121.00; // 100 + 10%
+    $cuota_de_iva = 21.00;
+    $porcentaje_de_iva = 21;
+    $porcentaje_de_recargo = 0;
+    $cuota_de_recargo = 0;
+    $porcentaje_de_retencion = 0;
+    $cuota_de_retencion = 0;
+
+    $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_factura );
+    $tipo_registro = 9;
+    $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
+    $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
+    $tipo_importe = "C";
+    $numero_factura = SubstrStrPadRight( $numero_factura_cliente,10," " );
+    $linea_apunte = "M";
+    $descripcion_apunte = SubstrStrPadRight( $nombre_cliente,30," " );
+    $subtipo_factura = "01"; //Operaciones interiores sujetas a IVA
+    $base_imponible = AdaptaImportes( $importe_total_iva_excl );
+    $porcentaje_iva = AdaptaPorcentajeIVA( $porcentaje_de_iva );
+    $cuota_iva = AdaptaImportes( $cuota_de_iva );
+    $porcentaje_recargo = AdaptaPorcentajeIVA( $porcentaje_de_recargo );
+    $cuota_recargo = AdaptaImportes( $cuota_de_recargo );
+    $porcentaje_retencion = AdaptaPorcentajeIVA( $porcentaje_de_retencion );
+    $cuota_retencion = AdaptaImportes( $cuota_de_retencion );
+    $impreso = "01"; //Impreso 347
+    $operacion_sujeta_iva = "S"; //Es una operación con IVA
+    $marca_afecta_415 = "N"; //No afecta
+    $critero_de_caja = " "; //1 espacio
+    $reserva = "              "; //14 espacios
+    $cuenta_iva_soportado = "477000000000";
+    $cuenta_recargo_soportado = "000000000000";
+	$cuenta_retencion = "000000000000";
+    $cuenta_iva_2_repercutido = "000000000000";
+    $cuenta_recargo_2_repercutido = "000000000000";
+    $registro_analitico = " "; //1 espacio
+	$reserva_1 = "                                                                                                                                                                                                                                                                "; //256 espacios
+	$moneda_enlace = "E";
+    
+    $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+
+    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+        
+        fwrite($archivo, $linea_iva_factura);
         fclose($archivo);
 
     }
