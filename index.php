@@ -56,7 +56,7 @@ function AdaptaImportes ( $importe_iva_incl ) {
     } else {
 
         $importe_iva_incl = str_pad($importe_iva_incl, 13, "0", STR_PAD_LEFT);
-        $importe_iva_incl	= "+{$importe_iva_incl}";
+        $importe_iva_incl = "+{$importe_iva_incl}";
 
     }
 
@@ -88,16 +88,16 @@ $codigo_de_empresa = 55555;
     $cuenta_contable_cliente = 430000069;
     $nombre_cliente = "Empresa de Ejemplo SL.";
     $nif_cliente = "B08205373";
-    $siglas_via_publica_cliente "CL";
+    $siglas_via_publica_cliente = "CL";
     $via_publica_cliente = "Ejemplo";
     $numero_portal_cliente = 123;
     $escalera_cliente = '';
     $piso_cliente = '';
     $puerta_cliente = '';
-    $municipio_cliente "Alicante";
+    $municipio_cliente = "Alicante";
     $codigo_postal_cliente = "02005";
-    $provincia_cliente "Alicante";
-    $pais_cliente "España";
+    $provincia_cliente = "Alicante";
+    $pais_cliente = "España";
     $telefono_cliente = "66666666";
     $extension_cliente = '';
     $fax_cliente = '';
@@ -129,19 +129,17 @@ $codigo_de_empresa = 55555;
     $email = SubstrStrPadRight( $email_cliente,30," " );
     $reservado = "  "; //2 espacios
     $criterio_de_caja = " "; //1 espacio
-    $cuenta_contrapartida 	= "            "; //12 espacios
+    $cuenta_contrapartida = "            "; //12 espacios
     $codigo_pais = "ES";
     $reserva_1 = "                                                                                                                                                                                                                                                              ";
     $moneda_enlace = "E";
 
     $linea_cliente = utf8_decode("5{$codigo_de_empresa}{$fecha_alta}{$tipo_de_registro}{$cuenta}{$descripcion_cuenta}{$actualiza_saldo_inicial}{$saldo_inicial}{$ampliacion}{$reserva}{$nif}{$siglas_via_publica}{$via_publica}{$numero_portal}{$escalera}{$piso}{$puerta}{$municipio}{$codigo_postal}{$provincia}{$pais}{$telefono}{$extension}{$fax}{$email}{$reservado}{$criterio_de_caja}{$reservado}{$cuenta_contrapartida}{$codigo_pais}{$reserva_1}{$moneda_enlace}N\r\n");
         
-    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+    $archivo = fopen( $nombre_archivo_exportado, "a" );
         
-        fwrite($archivo, $linea_cliente);
-        fclose($archivo);
-
-    }
+    fwrite($archivo, $linea_cliente);
+    fclose($archivo);
 
 //Finaliza loop 
 
@@ -152,7 +150,7 @@ $codigo_de_empresa = 55555;
 //Loop para recorrer todos los Tipo de registro 1,2 (facturas de venta)
 
     //Datos supuesta factura (Tipo de registro 1)
-    $fecha_factura "22/10/2022";
+    $fecha_factura = "22/10/2022";
     $importe_total_iva_excl = 200.00;
     $importe_total_iva_incl = 231.00; //100.00 + 21% y 100 + 10%
     $cuenta_contable_cliente = 430000069;
@@ -184,12 +182,10 @@ $codigo_de_empresa = 55555;
 
     $linea_factura_cabecera = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_de_factura}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$importe}{$reserva}{$nif}{$nombre_cliente}{$codigo_postal}{$reserva_1}{$fecha_operacion}{$fecha_de_factura}{$numero_ampliado}{$reserva_2}{$moneda_enlace}N\r\n");
         
-    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+    $archivo = fopen( $nombre_archivo_exportado, "a" );
         
-        fwrite($archivo, $linea_factura_cabecera);
-        fclose($archivo);
-
-    }
+    fwrite($archivo, $linea_factura_cabecera);
+    fclose($archivo);
 
     //TIPO DE REGISTRO 9. Detalle de apuntes con IVA
     /* 
@@ -239,12 +235,10 @@ $codigo_de_empresa = 55555;
     
     $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
 
-    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+    $archivo = fopen( $nombre_archivo_exportado, "a" );
         
-        fwrite($archivo, $linea_iva_factura);
-        fclose($archivo);
-
-    }
+    fwrite($archivo, $linea_iva_factura);
+    fclose($archivo);
 
     //Linea 2 (U):
     $importe_total_iva_excl = 100.00;
@@ -262,7 +256,7 @@ $codigo_de_empresa = 55555;
     $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
     $tipo_importe = "C";
     $numero_factura = SubstrStrPadRight( $numero_factura_cliente,10," " );
-    $linea_apunte = "M";
+    $linea_apunte = "U";
     $descripcion_apunte = SubstrStrPadRight( $nombre_cliente,30," " );
     $subtipo_factura = "01"; //Operaciones interiores sujetas a IVA
     $base_imponible = AdaptaImportes( $importe_total_iva_excl );
@@ -288,12 +282,12 @@ $codigo_de_empresa = 55555;
     
     $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
 
-    if ( $archivo == fopen( $nombre_archivo_exportado, "a" ) ) {
+    $archivo = fopen( $nombre_archivo_exportado, "a" );
         
-        fwrite($archivo, $linea_iva_factura);
-        fclose($archivo);
+    fwrite($archivo, $linea_iva_factura);
+    fclose($archivo);
 
-    }
+    
 
 //Finaliza loop 
 ?>
