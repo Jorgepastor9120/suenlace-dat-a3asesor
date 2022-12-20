@@ -24,6 +24,23 @@ function UnificaFechaDDMMAAAA ( $fecha_origen ) {
 
 }
 
+function CompruebaFechaClienteDDMMAAAA ( $fecha_origen ) {
+
+    $fecha = explode( "/" , $fecha_origen);
+
+    if ( $fecha[2] == date('Y') ) {
+
+        return true;
+
+    } else {
+
+        return false;
+
+    }
+
+
+}
+
 function CodigoPais ( $nombre_pais ) {
 
     if ( $nombre_pais == "España" || $nombre_pais == "Es" || $nombre_pais == "011" || empty ( $nombre_pais ) ) {
@@ -72,6 +89,24 @@ function AdaptaPorcentajeIVA ( $porcentaje_iva ) {
 
 }
 
+function ImportePagos ( $importe_cobro ) {
+
+    if ( $importe_cobro > 0 ) {
+
+        $tipo_importe_contable = "H";
+        $tipo_importe_tesoreria = "D";
+
+    } else {
+
+        $tipo_importe_contable = "D";
+        $tipo_importe_tesoreria = "H";
+
+    }
+
+    return array($tipo_importe_contable, $tipo_importe_tesoreria);
+
+}
+
 $nombre_archivo_exportado = "SUENLACE.dat";
 
 unlink($nombre_archivo_exportado); //Se llama a la función unlink por si hubiera un archivo ya creado.
@@ -84,7 +119,7 @@ $codigo_de_empresa = 55555;
 //Loop para recorrer todos los clientes que se quieran añadir al registro 
 
     //Datos supuesto cliente
-    $fecha_add_cliente = "2022/10/05";
+    $fecha_add_cliente = "05/10/2022";
     $cuenta_contable_cliente = 430000069;
     $nombre_cliente = "Empresa de Ejemplo SL.";
     $nif_cliente = "B08205373";
@@ -103,8 +138,18 @@ $codigo_de_empresa = 55555;
     $fax_cliente = '';
     $email_cliente = 'ejemplo@email.com';
 
-    
-    $fecha_alta = UnificaFechaAAAAMMDD( $fecha_add_cliente );
+
+    //La fecha de alta del cliente debe ser en el mismo año que el ejercicio al que hace referencia
+    if ( CompruebaFechaClienteDDMMAAAA( $fecha_add_cliente ) ) {
+
+        $fecha_alta = UnificaFechaDDMMAAAA( $fecha_add_cliente );
+
+    } else {
+
+        $fecha_alta = date('Ymd');
+
+    }
+
     $tipo_de_registro = "C";
     $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
     $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
@@ -190,7 +235,7 @@ $codigo_de_empresa = 55555;
     //TIPO DE REGISTRO 9. Detalle de apuntes con IVA
     /* 
     *Suponemos que en la factura a añadir tenemos 2 lineas, una con iva 10% y otra con iva 21%. 
-    *La primera línea de apunte (M o U) tendrá el valor M y la útlima linea tendrá el valor U.
+    *La primera línea de apunte (todas menos la última) tendrá el valor M y la útlima linea tendrá el valor U.
     */
 
     //Linea 1 (M):
@@ -202,6 +247,7 @@ $codigo_de_empresa = 55555;
     $cuota_de_recargo = 0;
     $porcentaje_de_retencion = 0;
     $cuota_de_retencion = 0;
+
 
     $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_factura );
     $tipo_registro = 9;
@@ -250,6 +296,7 @@ $codigo_de_empresa = 55555;
     $porcentaje_de_retencion = 0;
     $cuota_de_retencion = 0;
 
+
     $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_factura );
     $tipo_registro = 9;
     $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
@@ -287,7 +334,55 @@ $codigo_de_empresa = 55555;
     fwrite($archivo, $linea_iva_factura);
     fclose($archivo);
 
+//Finaliza loop 
+
+//TIPO DE REGISTRO 0. Alta de Apuntes sin IVA (Para los cobros de las facturas)
+    /* 
+    *Cada cobro incluirá dos lineas: linea de la cuenta contable del cliente y linea de la cuenta de tesorería
+    */
+
+//Loop para recorrer todos los pagos
+
+    //Datos de un supuesto cobro
+    $cuenta_contable_cliente = 430000069;
+    $nombre_cliente = "Empresa de Ejemplo SL.";
+    $id_cobro = 1234;
+    $numero_factura = 23000324;
+    $fecha_cobro = "15/12/2022";
+    $importe_de_cobro = 143.32;
+    $forma_de_cobro = "Transferencia bancaria";
+
+    $fecha_apunte = UnificaFechaDDMMAAAA( $fecha_cobro );
+    $tipo_registro = 0;
+    $cuenta = SubstrStrPadRight( $cuenta_contable_cliente,12," " );
+    $descripcion_cuenta = SubstrStrPadRight( $nombre_cliente,30," " );
+    list($tipo_importe_contable, $tipo_importe_tesoreria) = ImportePagos($importe_de_cobro);
+    $referencia_documento = SubstrStrPadRight( $numero_factura,10," " );
+    $linea_apunte_contable = "I";
+    $descripcion_apunte_contable = SubstrStrPadRight( "Cobro $nombre_cliente",30," " );
+    $importe = AdaptaImportes( $importe_de_cobro );
+    $reserva = "                                                                                                                                         "; //137 espacios
+    $indicador_asiento = " ";
+    $registro_analitico = " ";
+    $reserva_1 = "                                                                                                                                                                                                                                                                "; //256 espacios
+    $moneda_enlace = "E";
+
+    $cuenta_tesoreria = "570000001   ";
+    $linea_apunte_tesoreria = "U";
+    $descripcion_apunte_tesoreria = SubstrStrPadRight( "Cobro Fra $numero_factura $forma_de_cobro",30," " );
     
 
-//Finaliza loop 
+    $linea_cobro_1 = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe_contable}{$referencia_documento}{$linea_apunte_contable}{$descripcion_apunte_contable}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_cobro_2 = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta_tesoreria}{$descripcion_cuenta}{$tipo_importe_tesoreria}{$referencia_documento}{$linea_apunte_tesoreria}{$descripcion_apunte_tesoreria}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+
+    $linea_registro_tipo_0 = $linea_cobro_1;
+    $linea_registro_tipo_0 .= $linea_cobro_2;
+
+    $archivo = fopen( $nombre_archivo_exportado, "a" );
+        
+    fwrite($archivo, $linea_registro_tipo_0);
+    fclose($archivo);
+
+//Finaliza Loop
+
 ?>
