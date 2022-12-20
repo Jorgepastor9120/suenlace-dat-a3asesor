@@ -41,7 +41,7 @@ function CompruebaFechaClienteDDMMAAAA ( $fecha_origen ) {
 
 }
 
-function CodigoPais ( $nombre_pais ) {
+function CodigoPais ( $nombre_pais = "España" ) {
 
     if ( $nombre_pais == "España" || $nombre_pais == "Es" || $nombre_pais == "011" || empty ( $nombre_pais ) ) {
 
@@ -51,7 +51,7 @@ function CodigoPais ( $nombre_pais ) {
 
 }
 
-function AdaptaTelefono ( $telefono_cliente ) {
+function AdaptaTelefono ( $telefono_cliente = 0 ) {
 
     $telefono = preg_replace('([^0-9])', '', $telefono_cliente);
     $telefono = substr( $telefono, 0, 9 );
@@ -85,7 +85,7 @@ function AdaptaPorcentajeIVA ( $porcentaje_iva ) {
 
     $porcentaje_iva = number_format($porcentaje_iva, 2, '.', '');
 
-    return( str_pad($porcentaje_iva, 2, "0", STR_PAD_LEFT) );
+    return( str_pad($porcentaje_iva, 5, "0", STR_PAD_LEFT) );
 
 }
 
@@ -107,12 +107,11 @@ function ImportePagos ( $importe_cobro ) {
 
 }
 
-$nombre_archivo_exportado = "SUENLACE.dat";
-
-unlink($nombre_archivo_exportado); //Se llama a la función unlink por si hubiera un archivo ya creado.
-
 //Datos generales de la empresa
-$codigo_de_empresa = 55555;
+define('CODIGO_DE_EMPRESA', 55555);
+define('NOMBRE_ARCHIVO_EXPORTADO', "SUENLACE.dat");
+
+unlink(NOMBRE_ARCHIVO_EXPORTADO); //Se llama a la función unlink por si hubiera un archivo ya creado.
 
 //TIPO DE REGISTRO C. Alta / Modificación de cuentas y/o clientes y proveedores
 
@@ -165,7 +164,7 @@ $codigo_de_empresa = 55555;
     $piso = SubstrStrPadRight( $piso_cliente,2," " );
     $puerta = SubstrStrPadRight( $puerta_cliente,2," " );
     $municipio = SubstrStrPadRight( $municipio_cliente,20," " );
-    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,20," " );
+    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,5," " );
     $provincia = SubstrStrPadRight( $provincia_cliente,15," " );
     $pais = CodigoPais( $pais_cliente );
     $telefono = AdaptaTelefono( $telefono_cliente );
@@ -179,9 +178,9 @@ $codigo_de_empresa = 55555;
     $reserva_1 = "                                                                                                                                                                                                                                                              ";
     $moneda_enlace = "E";
 
-    $linea_cliente = utf8_decode("5{$codigo_de_empresa}{$fecha_alta}{$tipo_de_registro}{$cuenta}{$descripcion_cuenta}{$actualiza_saldo_inicial}{$saldo_inicial}{$ampliacion}{$reserva}{$nif}{$siglas_via_publica}{$via_publica}{$numero_portal}{$escalera}{$piso}{$puerta}{$municipio}{$codigo_postal}{$provincia}{$pais}{$telefono}{$extension}{$fax}{$email}{$reservado}{$criterio_de_caja}{$reservado}{$cuenta_contrapartida}{$codigo_pais}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_cliente = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_alta}{$tipo_de_registro}{$cuenta}{$descripcion_cuenta}{$actualiza_saldo_inicial}{$saldo_inicial}{$ampliacion}{$reserva}{$nif}{$siglas_via_publica}{$via_publica}{$numero_portal}{$escalera}{$piso}{$puerta}{$municipio}{$codigo_postal}{$provincia}{$pais}{$telefono}{$extension}{$fax}{$email}{$reservado}{$criterio_de_caja}{$reservado}{$cuenta_contrapartida}{$codigo_pais}{$reserva_1}{$moneda_enlace}N\r\n");
         
-    $archivo = fopen( $nombre_archivo_exportado, "a" );
+    $archivo = fopen( NOMBRE_ARCHIVO_EXPORTADO, "a" );
         
     fwrite($archivo, $linea_cliente);
     fclose($archivo);
@@ -216,8 +215,8 @@ $codigo_de_empresa = 55555;
     $importe = AdaptaImportes( $importe_total_iva_incl );
     $reserva = "                                                              "; //62 espacios
     $nif = SubstrStrPadRight( $nif_cliente,14," " );
-    $nombre_cliente = SubstrStrPadRight( $nombre_cliente,30," " );
-    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,20," " );
+    $nombre_cliente = SubstrStrPadRight( $nombre_cliente,40," " );
+    $codigo_postal = SubstrStrPadRight( $codigo_postal_cliente,5," " );
     $reserva_1 = "  "; //2 espacios
     $fecha_operacion = "        "; //8 espacios
     $fecha_de_factura = "        "; //8 espacios
@@ -225,9 +224,9 @@ $codigo_de_empresa = 55555;
     $reserva_2 = "                                                                                                                                                                                                    "; //196 espacios
     $moneda_enlace = "E";
 
-    $linea_factura_cabecera = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_de_factura}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$importe}{$reserva}{$nif}{$nombre_cliente}{$codigo_postal}{$reserva_1}{$fecha_operacion}{$fecha_de_factura}{$numero_ampliado}{$reserva_2}{$moneda_enlace}N\r\n");
+    $linea_factura_cabecera = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_de_factura}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$importe}{$reserva}{$nif}{$nombre_cliente}{$codigo_postal}{$reserva_1}{$fecha_operacion}{$fecha_de_factura}{$numero_ampliado}{$reserva_2}{$moneda_enlace}N\r\n");
         
-    $archivo = fopen( $nombre_archivo_exportado, "a" );
+    $archivo = fopen( NOMBRE_ARCHIVO_EXPORTADO, "a" );
         
     fwrite($archivo, $linea_factura_cabecera);
     fclose($archivo);
@@ -279,9 +278,9 @@ $codigo_de_empresa = 55555;
 	$reserva_1 = "                                                                                                                                                                                                                                                                "; //256 espacios
 	$moneda_enlace = "E";
     
-    $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_iva_factura = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
 
-    $archivo = fopen( $nombre_archivo_exportado, "a" );
+    $archivo = fopen( NOMBRE_ARCHIVO_EXPORTADO, "a" );
         
     fwrite($archivo, $linea_iva_factura);
     fclose($archivo);
@@ -327,9 +326,9 @@ $codigo_de_empresa = 55555;
 	$reserva_1 = "                                                                                                                                                                                                                                                                "; //256 espacios
 	$moneda_enlace = "E";
     
-    $linea_iva_factura = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_iva_factura = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe}{$numero_factura}{$linea_apunte}{$descripcion_apunte}{$subtipo_factura}{$base_imponible}{$porcentaje_iva}{$cuota_iva}{$porcentaje_recargo}{$cuota_recargo}{$porcentaje_retencion}{$cuota_retencion}{$impreso}{$operacion_sujeta_iva}{$marca_afecta_415}{$critero_de_caja}{$reserva}{$cuenta_iva_soportado}{$cuenta_recargo_soportado}{$cuenta_retencion}{$cuenta_iva_2_repercutido}{$cuenta_recargo_2_repercutido}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
 
-    $archivo = fopen( $nombre_archivo_exportado, "a" );
+    $archivo = fopen( NOMBRE_ARCHIVO_EXPORTADO, "a" );
         
     fwrite($archivo, $linea_iva_factura);
     fclose($archivo);
@@ -372,13 +371,13 @@ $codigo_de_empresa = 55555;
     $descripcion_apunte_tesoreria = SubstrStrPadRight( "Cobro Fra $numero_factura $forma_de_cobro",30," " );
     
 
-    $linea_cobro_1 = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe_contable}{$referencia_documento}{$linea_apunte_contable}{$descripcion_apunte_contable}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
-    $linea_cobro_2 = utf8_decode("5{$codigo_de_empresa}{$fecha_apunte}{$tipo_registro}{$cuenta_tesoreria}{$descripcion_cuenta}{$tipo_importe_tesoreria}{$referencia_documento}{$linea_apunte_tesoreria}{$descripcion_apunte_tesoreria}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_cobro_1 = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_apunte}{$tipo_registro}{$cuenta}{$descripcion_cuenta}{$tipo_importe_contable}{$referencia_documento}{$linea_apunte_contable}{$descripcion_apunte_contable}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
+    $linea_cobro_2 = utf8_decode("5" . CODIGO_DE_EMPRESA . "{$fecha_apunte}{$tipo_registro}{$cuenta_tesoreria}{$descripcion_cuenta}{$tipo_importe_tesoreria}{$referencia_documento}{$linea_apunte_tesoreria}{$descripcion_apunte_tesoreria}{$importe}{$reserva}{$indicador_asiento}{$registro_analitico}{$reserva_1}{$moneda_enlace}N\r\n");
 
     $linea_registro_tipo_0 = $linea_cobro_1;
     $linea_registro_tipo_0 .= $linea_cobro_2;
 
-    $archivo = fopen( $nombre_archivo_exportado, "a" );
+    $archivo = fopen( NOMBRE_ARCHIVO_EXPORTADO, "a" );
         
     fwrite($archivo, $linea_registro_tipo_0);
     fclose($archivo);
