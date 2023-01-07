@@ -1,0 +1,15 @@
+{
+    "name": "jorge/suenlace-dat-a3asesor",
+    "autoload": {
+        "psr-4": {
+            "Jorge\\SuenlaceDatA3asesor\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "jorgepastor9120",
+            "email": "jorgepastor9120@gmail.com"
+        }
+    ],
+    "require": {}
+}

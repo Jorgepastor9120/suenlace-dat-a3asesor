@@ -13,3 +13,8 @@ La aplicación genera un archivo .dat con 3 tipos de registros:
 NOTAS:
 La aplicación adapta cada uno de los datos al límite de longitud de caracteres para cada campo. También hace la conversión de las fecha y campos numericos entre otros (por ejemplo para un importe de 32,25€ la conversión sería +0000000032.25).
 Además está preparada para sustitur los comentarios Loop por tu modo de iteración para recorrer los datos e ir añadiendo las lineas a suenlace.dat.
+
+
+FUNCIONAMIENTO:
+
+Con la función DatosClientesArray() obtendras datos de ejemplo a través de un array de información.
