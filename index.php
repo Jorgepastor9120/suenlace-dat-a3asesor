@@ -238,7 +238,7 @@ foreach ($datosPagos as $pago) {
     $referencia_documento = $misAdaptaciones->SubstrStrPadRight($pago['numero_factura'], 10, " ");
     $linea_apunte_contable = "I";
     $descripcion_apunte_contable = $misAdaptaciones->SubstrStrPadRight("Cobro {$pago['nombre_cliente']}", 30, " ");
-    $importe = $misAdaptaciones->AdaptaImportes($importe_de_cobro);
+    $importe = $misAdaptaciones->AdaptaImportes($pago['importe_de_cobro']);
     $reserva = "                                                                                                                                         "; //137 espacios
     $indicador_asiento = " ";
     $registro_analitico = " ";

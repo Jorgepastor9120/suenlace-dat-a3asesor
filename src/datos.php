@@ -89,6 +89,14 @@ class Datos {
                 'numero_factura' => '230000049',
                 'importe_de_cobro' => 143.43,
                 'forma_de_cobro' => "Transferencia bancaria"
+            ],
+            [
+                'fecha_cobro' => '03/11/2022',
+                'cuenta_contable_cliente' => '430000069',
+                'nombre_cliente' => 'Empresa de Ejemplo SL',
+                'numero_factura' => '230000049',
+                'importe_de_cobro' => 87.57,
+                'forma_de_cobro' => "Efectivo"
             ]
         );
 
